@@ -1,5 +1,11 @@
 const HistoricoSchema = (sequelize, DataTypes) => {
   const HistoricoTable = sequelize.define('Historico', {
+    id: {
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      type: DataTypes.INTEGER
+    },
     contaId :{
       allowNull:false,
       type: DataTypes.UUID,
