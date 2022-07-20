@@ -1,5 +1,5 @@
 const HistoricoSchema = (sequelize, DataTypes) => {
-  const HistoricoTable = sequelize.define('Corretora', {
+  const HistoricoTable = sequelize.define('Historico', {
     contaId :{
       allowNull:false,
       type: DataTypes.UUID,
@@ -20,7 +20,11 @@ const HistoricoSchema = (sequelize, DataTypes) => {
       type: DataTypes.DATE, 
       defaultValue: DataTypes.NOW,
       field: 'date_order',
-    }
+    },
+    quantity: {
+      allowNull: true,
+      type: DataTypes.INTEGER,
+    },
   }, 
   {
     timestamps: false,
@@ -30,14 +34,14 @@ const HistoricoSchema = (sequelize, DataTypes) => {
   HistoricoTable.associate = (model) => {
 
     model.Conta.belongsToMany(model.Acao, {
-      as: 'acoes',
+      as: 'acoesHis',
       through: HistoricoTable,
       foreignKey: 'contaId',
       otherKey: 'acaoId'
     });
     
     model.Acao.belongsToMany(model.Conta, {
-      as: 'contas',
+      as: 'contasHis',
       through: HistoricoTable,
       foreignKey: 'acaoId',
       otherKey: 'contaId'
