@@ -3,10 +3,15 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const HistoricoTable = queryInterface.createTable('Historico', {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement: true,
+        type: Sequelize.INTEGER
+      },
       contaId :{
         allowNull:false,
         type: Sequelize.UUID,
-        primaryKey: true,
         references: {
           model: 'Contas',
           key: 'id'
@@ -18,7 +23,6 @@ module.exports = {
       acaoId :{
         allowNull:false,
         type: Sequelize.INTEGER,
-        primaryKey: true,
         references: {
           model: 'Acoes',
           key: 'id'
