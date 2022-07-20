@@ -8,7 +8,7 @@ const ContaSchema = (sequelize, DataTypes) => {
     userId: {
       allowNull: false,
       type: DataTypes.UUID,
-      field: 'user_name',
+      field: 'user_id',
     },
     bankBalance: {
       allowNull: false,
