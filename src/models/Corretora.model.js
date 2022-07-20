@@ -4,6 +4,7 @@ const CorretoraSchema = (sequelize, DataTypes) => {
       allowNull:false,
       type: DataTypes.INTEGER,
       field: 'acao_id',
+      primaryKey: true
     },
     quantity: {
       allowNull: false,
