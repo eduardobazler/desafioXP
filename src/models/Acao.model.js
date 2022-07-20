@@ -1,36 +1,36 @@
-'use strict';
+const AcaoSchema = (sequelize, DataTypes) => {
+  const AcaoTable = sequelize.define('Acao', {
+    id :{
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
+      type: DataTypes.INTEGER
+    },
+    company: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    tag: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    value: {
+      allowNull: false,
+      type: DataTypes.DOUBLE,
+    },
+  }, 
+  {
+    timestamps: false,
+    tableName: 'Acoes'
+  });
 
-module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    const AcoesTable = queryInterface.createTable('Acoes', {
-      id :{
-        allowNull: false,
-        primaryKey: true,
-        autoIncrement: true,
-        type: Sequelize.INTEGER
-      },
-      company: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      tag: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      value: {
-        allowNull: false,
-        type: Sequelize.DOUBLE,
-      },
+  AcaoTable.associate = (models) => {
+    AcaoTable.hasOne(models.Corretora, {
+      foreignKey: 'acaoId', as: 'corretora'
     });
+  }
 
-    AcoesTable.associate = (models) => {
-      AcoesTable.hasOne(models.Conta, {
-        foreignKey: 'acaoId', as: 'corretora'
-      })
-    }  
+  return AcaoTable;
+}
 
-    return AcoesTable;
-  },
-
-  down: async (queryInterface) => queryInterface.dropTable('Acoes')
-};
+module.exports = AcaoSchema;
