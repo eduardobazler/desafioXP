@@ -6,4 +6,6 @@ const routerInvestimentos = express.Router();
 
 routerInvestimentos.post('/comprar', investimentosController.buyAssets);
 
+routerInvestimentos.post('/vender', investimentosController.saleAssets)
+
 module.exports = routerInvestimentos;
