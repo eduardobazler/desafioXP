@@ -29,7 +29,7 @@ const upadteBuyAssetsBroker = async (codAtivo, qtdeAtivo, qtdeAvailable, transac
   });
 }
 
-const updateBankBalanceBuy = async ({ amountRequired, bankBalance }, codCliente, transaction) => {
+const updateBankBalanceBuy = async (amountRequired, bankBalance, codCliente, transaction) => {
   const newBankBalance = bankBalance - amountRequired;
   await Conta.update({ bankBalance: newBankBalance }, {
     where: { id: codCliente },
@@ -46,9 +46,28 @@ const upadateHistoryOrders = async (type, codCliente, codAtivo, qtdeAtivo, trans
    }, { transaction });
 };
 
+const upadteSaleAssetsBroker = async (codAtivo, qtdeAtivo, transaction) => {
+  const { quantity } = await Corretora.findOne({ where: { acaoId: codAtivo } });
+  const newQtdeAvailable = quantity + qtdeAtivo
+  await Corretora.update({ quantity: newQtdeAvailable }, {
+    where: { acaoId: codAtivo },
+    transaction
+  });
+}
+
+const updateSaleAssetsAccount = async (codAtivo, qtdeAtivo, qtdeAvailable, codCliente, transaction) => {
+  const newQtdeAvailable = qtdeAvailable - qtdeAtivo;
+  await ContaAcoes.update({ quantity: newQtdeAvailable }, {
+    where: { acaoId: codAtivo, contaId: codCliente },
+    transaction
+  });
+}
+
 module.exports = {
   updateBuyAssetsAccount,
   upadteBuyAssetsBroker,
   updateBankBalanceBuy,
-  upadateHistoryOrders
+  upadateHistoryOrders,
+  upadteSaleAssetsBroker,
+  updateSaleAssetsAccount,
 }
