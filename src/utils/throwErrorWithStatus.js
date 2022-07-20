@@ -1,5 +1,4 @@
-
-const throwErroWithStatus = ({ message = '', status }) => {
+const throwErroWithStatus = ({ status, message = '' }) => {
   const error = new Error(message);
   error.status = status;
   throw error;
