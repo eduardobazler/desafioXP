@@ -2,8 +2,8 @@ const { StatusCodes } = require('http-status-codes');
 const { Conta, ContaAcoes, Acao } = require('../models');
 const throwErroWithStatus = require('../utils/throwErrorWithStatus');
 
-const checkAcount = async (codCliente) => {
-  const account = await Conta.findOne({ where: { id: codCliente } });
+const checkAcount = async (contaId) => {
+  const account = await Conta.findOne({ where: { id: contaId } });
   if (!account) {
     throwErroWithStatus({
       status: StatusCodes.BAD_REQUEST,
@@ -13,21 +13,21 @@ const checkAcount = async (codCliente) => {
   return account;
 }
 
-const updateAmountMoneyAccount = async (codCliente, currentValue) => {
+const updateAmountMoneyAccount = async (contaId, currentValue) => {
   await Conta.update({ bankBalance: currentValue }, 
-    { where: { id: codCliente } });
+    { where: { id: contaId } });
 }
 
-const accountDeposit = async ({ codCliente, valor }) => {
-  const {bankBalance: previusBankBalance} = await checkAcount(codCliente);
+const accountDeposit = async ({ contaId, valor }) => {
+  const {bankBalance: previusBankBalance} = await checkAcount(contaId);
   const currentBankBalance = previusBankBalance + valor;
-  await updateAmountMoneyAccount(codCliente ,currentBankBalance);
-  return { codCliente, valor, status: 'deposioto executado' }
+  await updateAmountMoneyAccount(contaId ,currentBankBalance);
+  return { contaId, valor, status: 'deposioto executado' }
 }
 
 
-const accountWithdrawal = async ({codCliente, valor}) => {
-  const { bankBalance: previusBankBalance } = await checkAcount(codCliente);
+const accountWithdrawal = async ({contaId, valor}) => {
+  const { bankBalance: previusBankBalance } = await checkAcount(contaId);
   if(valor > previusBankBalance) {
     return throwErroWithStatus({
       status: StatusCodes.UNPROCESSABLE_ENTITY,
@@ -35,26 +35,26 @@ const accountWithdrawal = async ({codCliente, valor}) => {
     });
   }
   const currentBankBalance = previusBankBalance - valor;
-  await updateAmountMoneyAccount(codCliente, currentBankBalance);
-  return { codCliente, valor, status: 'saque executado' }
+  await updateAmountMoneyAccount(contaId, currentBankBalance);
+  return { contaId, valor, status: 'saque executado' }
 }
 
 
-const getBankBalance = async (codCliente) => {
-  const { bankBalance } = await checkAcount(codCliente);
-  return { codCliente, saldo: bankBalance };
+const getBankBalance = async (contaId) => {
+  const { bankBalance } = await checkAcount(contaId);
+  return { contaId, saldo: bankBalance };
 }
 
-const getAssets = async (codCliente) => {
+const getAssets = async (contaId) => {
   const { acoes } = await Conta.findOne({ 
-  where: { id: codCliente}, 
+  where: { id: contaId}, 
   attributes: ['id'],
   include: { model: Acao, as: 'acoes',  
     through: { attributes: ['quantity'] } 
     } 
   });
   
-  return { codCliente: codCliente, acoes };
+  return { contaId, acoes };
 }
 
 module.exports = {

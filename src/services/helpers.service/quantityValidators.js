@@ -3,8 +3,8 @@ const throwErrorWithStatus = require('../../utils/throwErrorWithStatus');
 const { StatusCodes } = require('http-status-codes');
 
 
-const checkBrokerHasAsset = async (codAtivo) => {
-  const asset = await Corretora.findOne({ where: { acaoId: codAtivo },
+const checkBrokerHasAsset = async (acaoId) => {
+  const asset = await Corretora.findOne({ where: { acaoId },
     include: { model: Acao, as: 'acao' }});
 
     if (!asset) {
@@ -21,7 +21,7 @@ const checkBrokerHasAsset = async (codAtivo) => {
     }
 }
 
-const checkQuantityAssetsAvailable = (qtdeAtivo ,qtdeAvailable) => {
+const checkQuantityAssetsAvailable = (qtdeAtivo, qtdeAvailable) => {
   if (qtdeAtivo > qtdeAvailable) {
     return throwErrorWithStatus({ 
       status: StatusCodes.UNPROCESSABLE_ENTITY,
@@ -42,8 +42,8 @@ const checkBankBalanceUserAvailable = async (qtdeAtivo, valorAtivo, contaId) => 
   return { amountRequired, bankBalance };
 };
 
-const checkUserHasAsset = async (codCliente, codAtivo) => {
-  const asset = await ContaAcoes.findOne({ where: { acaoId: codAtivo, contaId: codCliente } });
+const checkUserHasAsset = async (contaId, acaoId) => {
+  const asset = await ContaAcoes.findOne({ where: { acaoId, contaId } });
   if (!asset) {
     return throwErrorWithStatus({
       status: StatusCodes.UNPROCESSABLE_ENTITY,

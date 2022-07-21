@@ -2,26 +2,26 @@ const contaService = require('../services/conta.service');
 const { StatusCodes } = require('http-status-codes');
 
 const accountDeposit = async (req, res) => {
-  const { codCliente, valor } = req.body;
-  const dataResponse = await contaService.accountDeposit({ codCliente, valor });
+  const { contaId, valor } = req.body;
+  const dataResponse = await contaService.accountDeposit({ contaId, valor });
   res.status(StatusCodes.OK).json(dataResponse);
 };
 
 const accountWithdrawal = async (req, res) => {
-  const { codCliente, valor } = req.body;
-  const dataResponse = await contaService.accountWithdrawal({ codCliente, valor });
+  const { contaId, valor } = req.body;
+  const dataResponse = await contaService.accountWithdrawal({ contaId, valor });
   res.status(StatusCodes.OK).json(dataResponse);
 }
 
 const getBankBalance = async (req, res) => {
-  const { id: codCliente } = req.params;
-  const dataResponse = await contaService.getBankBalance(codCliente);
+  const { id: contaId } = req.params;
+  const dataResponse = await contaService.getBankBalance(contaId);
   res.status(StatusCodes.OK).json(dataResponse);
 }
 
 const getAssets = async (req, res) => {
-  const { id: codCliente } = req.params;
-  const dataResponse = await contaService.getAssets(codCliente);
+  const { id: contaId } = req.params;
+  const dataResponse = await contaService.getAssets(contaId);
   res.status(StatusCodes.OK).json(dataResponse);
 }
 

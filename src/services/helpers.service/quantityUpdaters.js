@@ -1,13 +1,13 @@
 const { ContaAcoes, Corretora, Historico, Conta } = require('../../models')
 
-const updateBuyAssetsAccount = async (codCliente, codAtivo, qtdeAtivo, transaction) => {
+const updateBuyAssetsAccount = async (contaId, acaoId, qtdeAtivo, transaction) => {
   const dataValues = await ContaAcoes.findOne({
-    where: { contaId: codCliente, acaoId: codAtivo }
+    where: { contaId, acaoId }
   });
   // caso não exista a relação, cria a relação
   if(!dataValues) {
     const createdRelationAsset = ContaAcoes.create({
-      contaId: codCliente, acaoId: codAtivo, quantity: qtdeAtivo
+      contaId, acaoId, quantity: qtdeAtivo
     }, { transaction });
     return createdRelationAsset;
   }
@@ -15,50 +15,50 @@ const updateBuyAssetsAccount = async (codCliente, codAtivo, qtdeAtivo, transacti
   // caso exista a relação, atualiza a quantidade
   const newQuantity = qtdeAtivo + dataValues.quantity;
   const updatedRalationAsset = await ContaAcoes.update({ quantity: newQuantity }, {
-    where: { contaId: codCliente, acaoId: codAtivo },
+    where: { contaId, acaoId },
     transaction
   });
   return updatedRalationAsset;
 }
 
-const upadteBuyAssetsBroker = async (codAtivo, qtdeAtivo, qtdeAvailable, transaction) => {
+const upadteBuyAssetsBroker = async (acaoId, qtdeAtivo, qtdeAvailable, transaction) => {
   const newQtdeAvailable = qtdeAvailable - qtdeAtivo;
   await Corretora.update({ quantity: newQtdeAvailable }, {
-    where: { acaoId: codAtivo },
+    where: { acaoId },
     transaction
   });
 }
 
-const updateBankBalanceBuy = async (amountRequired, bankBalance, codCliente, transaction) => {
+const updateBankBalanceBuy = async (amountRequired, bankBalance, contaId, transaction) => {
   const newBankBalance = bankBalance - amountRequired;
   await Conta.update({ bankBalance: newBankBalance }, {
-    where: { id: codCliente },
+    where: { id: contaId },
     transaction
   })
 }
 
-const upadateHistoryOrders = async (type, codCliente, codAtivo, qtdeAtivo, transaction) => {
+const upadateHistoryOrders = async (type, contaId, acaoId, qtdeAtivo, transaction) => {
   await Historico.create({ 
-    contaId: codCliente,
-    acaoId: codAtivo,
+    contaId,
+    acaoId,
     quantity: qtdeAtivo,
     typeOrder: type,
    }, { transaction });
 };
 
-const upadteSaleAssetsBroker = async (codAtivo, qtdeAtivo, transaction) => {
-  const { quantity } = await Corretora.findOne({ where: { acaoId: codAtivo } });
+const upadteSaleAssetsBroker = async (acaoId, qtdeAtivo, transaction) => {
+  const { quantity } = await Corretora.findOne({ where: { acaoId: acaoId } });
   const newQtdeAvailable = quantity + qtdeAtivo
   await Corretora.update({ quantity: newQtdeAvailable }, {
-    where: { acaoId: codAtivo },
+    where: { acaoId },
     transaction
   });
 }
 
-const updateSaleAssetsAccount = async (codAtivo, qtdeAtivo, qtdeAvailable, codCliente, transaction) => {
+const updateSaleAssetsAccount = async (acaoId, qtdeAtivo, qtdeAvailable, contaId, transaction) => {
   const newQtdeAvailable = qtdeAvailable - qtdeAtivo;
   await ContaAcoes.update({ quantity: newQtdeAvailable }, {
-    where: { acaoId: codAtivo, contaId: codCliente },
+    where: { acaoId, contaId },
     transaction
   });
 }
