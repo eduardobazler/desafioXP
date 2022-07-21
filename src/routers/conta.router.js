@@ -1,12 +1,13 @@
 const express = require('express');
 const contaController = require('../controllers/conta.controller');
+const { validationsBodyDeposito } = require('../middlewares/validationBody.middleware');
 require('express-async-errors');
 
 const contaRouter = express.Router();
 
-contaRouter.post('/deposito', contaController.accountDeposit);
+contaRouter.post('/deposito', validationsBodyDeposito, contaController.accountDeposit);
 
-contaRouter.post('/saque', contaController.accountWithdrawal);
+contaRouter.post('/saque', validationsBodyDeposito, contaController.accountWithdrawal);
 
 contaRouter.get('/ativos/:id', contaController.getAssets)
 
