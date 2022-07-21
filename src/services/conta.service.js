@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { Conta } = require('../models');
+const { Conta, ContaAcoes, Acao } = require('../models');
 const throwErroWithStatus = require('../utils/throwErrorWithStatus');
 
 const checkAcount = async (codCliente) => {
@@ -10,19 +10,56 @@ const checkAcount = async (codCliente) => {
       message: 'Dados inválidos.'
     });
   }
-  return account.bankBalance;
+  return account;
+}
+
+const updateAmountMoneyAccount = async (codCliente, currentValue) => {
+  await Conta.update({ bankBalance: currentValue }, 
+    { where: { id: codCliente } });
 }
 
 const accountDeposit = async ({ codCliente, valor }) => {
-  const previusBankBalance = await checkAcount(codCliente);
+  const {bankBalance: previusBankBalance} = await checkAcount(codCliente);
   const currentBankBalance = previusBankBalance + valor;
-  const deposit = await Conta.update({
-    bankBalance: currentBankBalance,
-  }, { where: { id: codCliente } });
-  console.log(deposit);
-  return { codCliente, valor, status: 'executado' }
+  await updateAmountMoneyAccount(codCliente ,currentBankBalance);
+  return { codCliente, valor, status: 'deposioto executado' }
+}
+
+
+const accountWithdrawal = async ({codCliente, valor}) => {
+  const { bankBalance: previusBankBalance } = await checkAcount(codCliente);
+  if(valor > previusBankBalance) {
+    return throwErroWithStatus({
+      status: StatusCodes.UNPROCESSABLE_ENTITY,
+      message: 'Valor indisponível.',
+    });
+  }
+  const currentBankBalance = previusBankBalance - valor;
+  await updateAmountMoneyAccount(codCliente, currentBankBalance);
+  return { codCliente, valor, status: 'saque executado' }
+}
+
+
+const getBankBalance = async (codCliente) => {
+  const { bankBalance } = await checkAcount(codCliente);
+  return { codCliente, saldo: bankBalance };
+}
+
+const getAssets = async (codCliente) => {
+  const { acoes } = await Conta.findOne({ 
+  where: { id: codCliente}, 
+  attributes: ['id'],
+  include: { model: Acao, as: 'acoes',  
+    through: { attributes: ['quantity'] } 
+    } 
+  });
+  
+  return { codCliente: codCliente, acoes };
 }
 
 module.exports = {
   accountDeposit,
+  accountWithdrawal,
+  getBankBalance,
+  getAssets,
 }
