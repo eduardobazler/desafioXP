@@ -21,8 +21,8 @@ const checkBrokerHasAsset = async (acaoId) => {
     }
 }
 
-const checkQuantityAssetsAvailable = (qtdeAtivo, qtdeAvailable) => {
-  if (qtdeAtivo > qtdeAvailable) {
+const checkQuantityAssetsAvailable = (qtdeAcao, qtdeAvailable) => {
+  if (qtdeAcao > qtdeAvailable) {
     return throwErrorWithStatus({ 
       status: StatusCodes.UNPROCESSABLE_ENTITY,
       message: 'Quantidade da ação indisponível'
@@ -30,8 +30,8 @@ const checkQuantityAssetsAvailable = (qtdeAtivo, qtdeAvailable) => {
   }
 };
 
-const checkBankBalanceUserAvailable = async (qtdeAtivo, valorAtivo, contaId) => {
-  const amountRequired = (qtdeAtivo * valorAtivo);
+const checkBankBalanceUserAvailable = async (qtdeAcao, valorAtivo, contaId) => {
+  const amountRequired = (qtdeAcao * valorAtivo);
   const { bankBalance } = await Conta.findOne({ where: { id: contaId } });
   if (amountRequired > bankBalance) {
     return throwErrorWithStatus({ 

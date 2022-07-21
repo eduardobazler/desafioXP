@@ -1,19 +1,19 @@
 const { ContaAcoes, Corretora, Historico, Conta } = require('../../models')
 
-const updateBuyAssetsAccount = async (contaId, acaoId, qtdeAtivo, transaction) => {
+const updateBuyAssetsAccount = async (contaId, acaoId, qtdeAcao, transaction) => {
   const dataValues = await ContaAcoes.findOne({
     where: { contaId, acaoId }
   });
   // caso não exista a relação, cria a relação
   if(!dataValues) {
     const createdRelationAsset = ContaAcoes.create({
-      contaId, acaoId, quantity: qtdeAtivo
+      contaId, acaoId, quantity: qtdeAcao
     }, { transaction });
     return createdRelationAsset;
   }
 
   // caso exista a relação, atualiza a quantidade
-  const newQuantity = qtdeAtivo + dataValues.quantity;
+  const newQuantity = qtdeAcao + dataValues.quantity;
   const updatedRalationAsset = await ContaAcoes.update({ quantity: newQuantity }, {
     where: { contaId, acaoId },
     transaction
@@ -21,8 +21,8 @@ const updateBuyAssetsAccount = async (contaId, acaoId, qtdeAtivo, transaction) =
   return updatedRalationAsset;
 }
 
-const upadteBuyAssetsBroker = async (acaoId, qtdeAtivo, qtdeAvailable, transaction) => {
-  const newQtdeAvailable = qtdeAvailable - qtdeAtivo;
+const upadteBuyAssetsBroker = async (acaoId, qtdeAcao, qtdeAvailable, transaction) => {
+  const newQtdeAvailable = qtdeAvailable - qtdeAcao;
   await Corretora.update({ quantity: newQtdeAvailable }, {
     where: { acaoId },
     transaction
@@ -37,26 +37,26 @@ const updateBankBalanceBuy = async (amountRequired, bankBalance, contaId, transa
   })
 }
 
-const upadateHistoryOrders = async (type, contaId, acaoId, qtdeAtivo, transaction) => {
+const upadateHistoryOrders = async (type, contaId, acaoId, qtdeAcao, transaction) => {
   await Historico.create({ 
     contaId,
     acaoId,
-    quantity: qtdeAtivo,
+    quantity: qtdeAcao,
     typeOrder: type,
    }, { transaction });
 };
 
-const upadteSaleAssetsBroker = async (acaoId, qtdeAtivo, transaction) => {
+const upadteSaleAssetsBroker = async (acaoId, qtdeAcao, transaction) => {
   const { quantity } = await Corretora.findOne({ where: { acaoId: acaoId } });
-  const newQtdeAvailable = quantity + qtdeAtivo
+  const newQtdeAvailable = quantity + qtdeAcao
   await Corretora.update({ quantity: newQtdeAvailable }, {
     where: { acaoId },
     transaction
   });
 }
 
-const updateSaleAssetsAccount = async (acaoId, qtdeAtivo, qtdeAvailable, contaId, transaction) => {
-  const newQtdeAvailable = qtdeAvailable - qtdeAtivo;
+const updateSaleAssetsAccount = async (acaoId, qtdeAcao, qtdeAvailable, contaId, transaction) => {
+  const newQtdeAvailable = qtdeAvailable - qtdeAcao;
   await ContaAcoes.update({ quantity: newQtdeAvailable }, {
     where: { acaoId, contaId },
     transaction
