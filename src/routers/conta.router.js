@@ -9,7 +9,7 @@ contaRouter.post('/deposito', validationsBodyDeposito, contaController.accountDe
 
 contaRouter.post('/saque', validationsBodyDeposito, contaController.accountWithdrawal);
 
-contaRouter.get('/ativos/:id', contaController.getAssets)
+contaRouter.get('/ativos/:id', contaController.getAssets);
 
 contaRouter.get('/:id', contaController.getBankBalance);
 
