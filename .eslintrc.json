@@ -11,5 +11,13 @@
   },
   "rules": {
     "no-unused-vars": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["tests/units/*.test.js"], // Or *.test.js
+      "rules": {
+        "require-jsdoc": "off"
+      }
+    }
+  ],
 }
