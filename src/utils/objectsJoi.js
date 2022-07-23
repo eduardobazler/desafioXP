@@ -23,8 +23,21 @@ const depositoBodyDTO = Joi.object({
   'string.guid': messageStringGuid,
 });
 
+const assetBodyDTO = Joi.object({
+  company: Joi.string().min(6).required(),
+  tag: Joi.string().min(3).required(),
+  value: Joi.number().min(0.001).required(),
+  quantity: Joi.number().integer().min(1).required(),
+});
+
+const authBody = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(5).required(),
+})
 
 module.exports = {
   investimentoBodyDTO,
   depositoBodyDTO,
+  assetBodyDTO,
+  authBody,
 }
