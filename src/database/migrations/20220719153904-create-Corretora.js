@@ -5,6 +5,7 @@ module.exports = {
     const CorretoraTable = queryInterface.createTable('Corretora', {
       acaoId :{
         allowNull:false,
+        primaryKey: true,
         type: Sequelize.INTEGER,
         references: {
           model: 'Acoes',

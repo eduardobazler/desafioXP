@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { Conta, ContaAcoes, Acao } = require('../models');
+const { Conta, Acao } = require('../models');
 const throwErroWithStatus = require('../utils/throwErrorWithStatus');
 
 const checkAcount = async (contaId) => {

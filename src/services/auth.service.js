@@ -17,7 +17,7 @@ const comparePassword = (reqPass, dbPass) => {
 const authUser = async ({ email, password }) => {
   const user = await User.findOne({
     where: { email },
-    attributes: [ 'id', 'email', 'role', 'userName', 'password' ]
+    attributes: [ 'id', 'email', 'role', 'userName', 'password' ],
   });
 
   if (!user) {
@@ -41,4 +41,5 @@ const authUser = async ({ email, password }) => {
 
 module.exports = {
   authUser,
+  comparePassword
 }

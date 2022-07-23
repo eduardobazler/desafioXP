@@ -30,7 +30,30 @@ const getByAsset = async (acaoId) => {
   return asset;
 }
 
+const checkAsset = async (company, tag) => {
+  const asset = await Acao.findOne({
+    where: { company, tag }
+   });
+
+   if(asset) {
+    return throwErroWithStatus({
+      message: 'Asset already exists.',
+      status: StatusCodes.UNPROCESSABLE_ENTITY
+    });
+   }
+}
+
+const createAsset = async ({ company, tag, value, quantity }) => {
+  await checkAsset(company, tag)
+  const newAsset = await Acao.create({ company, tag, value });
+  await Corretora.create({ acaoId: newAsset.id, quantity });
+
+  return { acaoId: newAsset.id, company, tag, quantity }
+}
+
 module.exports = {
   getAllAssets,
   getByAsset,
+  createAsset,
+  checkAsset
 }
