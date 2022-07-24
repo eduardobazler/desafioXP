@@ -96,7 +96,7 @@ https://bazlerativos.herokuapp.com/
       {
         "message": "mensagem de erro",
       }
-      ```
+    ```
 
 ### 1 - User POST `/user`
 
@@ -108,7 +108,7 @@ https://bazlerativos.herokuapp.com/
         "email": "usuario@email.com",
         "password": "123456",
       }
-      ```
+    ```
 - Com a criação do usuário, será criada uma conta vinculada com o id do usuário.
 - O retorno de sucesso traz o id da nova conta no seguinte formato:
 
@@ -118,7 +118,7 @@ https://bazlerativos.herokuapp.com/
         "email": "usuario@email.com",
         "userName": "nome do usuário"
       }
-      ```
+    ```
 ---
 
 ### 2 - Auth POST `/auth`
@@ -129,13 +129,13 @@ https://bazlerativos.herokuapp.com/
         "email": "usuario@email.com",
         "password": "123456",
       }
-      ```
+    ```
 - O Retorno do token será no seguinte formato:
     ```json
       {
         "token": "token do usuario"
       }
-      ```
+  ```
 ---
 
 ### 3 - Rotas de investimentos POST `/ivestimentos/{comprar||vender}`
@@ -149,7 +149,7 @@ https://bazlerativos.herokuapp.com/
         "acaoId": 1,
         "qtdeAcao": 100
       }
-      ```
+    ```
 - Na compra de uma ação ocorre as seguintes verificações:
   1. Se a Corretora contém a quantidade requerida.
   2. Se a conta do usuário possui saldo suficiente para a compra da quantidade.
@@ -170,7 +170,7 @@ atualizando o saldo do usuário.
         "qtdeAcao": 100,
         "status": "executada"
       }
-      ```
+    ```
 ---
 
 ### 4 - Rotas de Conta POST `/conta/{deposito||saque}`
@@ -184,7 +184,7 @@ atualizando o saldo do usuário.
         "contaId": "662e8847-f1fa-4489-b556-60ba24c79cf6",
         "valor": 100.00,
       }
-      ```
+    ```
 - Na rota de deposito é atualizado o valor do saldo da conta do usuário
 - Na rota de saque existe a validação se a conta pertence ao usuário, somente com essa validação é atualizado o saldo do usuário.
 
@@ -196,7 +196,7 @@ atualizando o saldo do usuário.
         "valor": 100.00,
         "status": "{saque||deposito} executado"
       }
-      ```
+    ```
 ---
 
 ### 5 - Rotas de conta GET  `/conta/:contaId`
@@ -211,7 +211,7 @@ atualizando o saldo do usuário.
         "contaId": "662e8847-f1fa-4489-b556-60ba24c79cf6",
         "saldo": 100.00
       }
-      ```
+    ```
 ---
 
 ### 6 - Rotas de conta GET  `/conta/ativos/:contaId`
@@ -245,7 +245,7 @@ atualizando o saldo do usuário.
           }
         ]
       }
-      ```
+    ```
 ---
 
 ### 7 - Rotas de ativos GET  `/ativos`
@@ -284,7 +284,7 @@ atualizando o saldo do usuário.
             }
           }
         ]
-      ```
+    ```
 ---
 
 ### 8 - Rotas de ativos GET  `/ativos/:acaoId`
@@ -303,7 +303,7 @@ atualizando o saldo do usuário.
             "value": 72.56
           }
         }
-      ```
+    ```
 ---
 
 ### 9 - Rotas de ativos POST `/ativos`
@@ -319,7 +319,7 @@ atualizando o saldo do usuário.
         "value": 100.00,
         "quantity": 5000,
       }
-      ```
+    ```
 - Na rota de deposito é atualizado o valor do saldo da conta do usuário
 - Na rota de saque existe a validação se a conta pertence ao usuário, somente com essa validação é atualizado o saldo do usuário.
 
@@ -332,6 +332,6 @@ atualizando o saldo do usuário.
         "tag": "XPTO",
         "quantity": 5000,
       }
-      ```
+    ```
 ---
 
