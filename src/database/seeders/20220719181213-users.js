@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
-const generateHash = require('../../utils/generateHash');
+const hash = require('../../utils/generateHash');
 const ids = require('../helpers/uuids');
 
-const senha1 = generateHash('user1');
-const senha2 = generateHash('user2');
-const senha3 = generateHash('user3');
+const senha1 = hash.generateHash('user1');
+const senha2 = hash.generateHash('user2');
+const senha3 = hash.generateHash('user3');
 
 module.exports = {
   up: async (queryInterface, _Sequelize) => {

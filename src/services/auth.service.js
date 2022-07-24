@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const { User } = require('../models');
 const bcrypt = require('bcrypt');
-const { generateToken } = require('../utils/JWTtoken');
+const JWT = require('../utils/JWTtoken');
 const throwErroWithStatus = require('../utils/throwErrorWithStatus');
 
 const comparePassword = (reqPass, dbPass) => {
@@ -28,7 +28,7 @@ const authUser = async ({ email, password }) => {
 
   comparePassword(password, dataValues.password);
   
-  token = generateToken({
+  token = JWT.generateToken({
     id: dataValues.id,
     role: dataValues.role,
     email: dataValues.email,

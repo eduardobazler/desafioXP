@@ -58,6 +58,8 @@ const getAssets = async (contaId) => {
 }
 
 module.exports = {
+  checkAcount,
+  updateAmountMoneyAccount,
   accountDeposit,
   accountWithdrawal,
   getBankBalance,

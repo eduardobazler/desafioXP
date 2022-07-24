@@ -1,37 +1,24 @@
 const Sequelize = require('sequelize');
 const throwErroWithStatus = require('../utils/throwErrorWithStatus');
 
-const { 
-  updateBuyAssetsAccount,
-  upadteBuyAssetsBroker,
-  updateBankBalanceBuy,
-  upadateHistoryOrders,
-  upadteSaleAssetsBroker,
-  updateSaleAssetsAccount,
-} = require('./helpers.service/quantityUpdaters');
-
-const {
-  checkBrokerHasAsset,
-  checkQuantityAssetsAvailable,
-  checkBankBalanceUserAvailable,
-  checkUserHasAsset,
-} = require('./helpers.service/quantityValidators');
+const updaters = require('./helpers.service/quantityUpdaters');
+const validators = require('./helpers.service/quantityValidators');
 
 const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
 
 const serviceBuyAssets = async ({ contaId, acaoId, qtdeAcao }) => {
-  const { qtdeAvailableBroker, valorAtivo } = await checkBrokerHasAsset(acaoId);
-  checkQuantityAssetsAvailable(qtdeAcao, qtdeAvailableBroker);
-  const { amountRequired, bankBalance } = await checkBankBalanceUserAvailable(qtdeAcao, valorAtivo, contaId);
+  const { qtdeAvailableBroker, valorAtivo } = await validators.checkBrokerHasAsset(acaoId);
+  validators.checkQuantityAssetsAvailable(qtdeAcao, qtdeAvailableBroker);
+  const { amountRequired, bankBalance } = await validators.checkBankBalanceUserAvailable(qtdeAcao, valorAtivo, contaId);
   
   const transaction = await sequelize.transaction();
   try {
-    await updateBuyAssetsAccount(contaId, acaoId, qtdeAcao, transaction);
-    await upadteBuyAssetsBroker(acaoId, qtdeAcao, qtdeAvailableBroker, transaction);
-    await updateBankBalanceBuy(amountRequired, bankBalance, contaId, transaction);
-    await upadateHistoryOrders('compra', contaId, acaoId, qtdeAcao, transaction);
+    await updaters.updateBuyAssetsAccount(contaId, acaoId, qtdeAcao, transaction);
+    await updaters.upadteBuyAssetsBroker(acaoId, qtdeAcao, qtdeAvailableBroker, transaction);
+    await updaters.updateBankBalanceBuy(amountRequired, bankBalance, contaId, transaction);
+    await updaters.upadateHistoryOrders('compra', contaId, acaoId, qtdeAcao, transaction);
 
     await transaction.commit();
     return { contaId, acaoId, qtdeAcao, status: 'executada' }
@@ -42,14 +29,14 @@ const serviceBuyAssets = async ({ contaId, acaoId, qtdeAcao }) => {
 }
 
 const serviceSaleAssets = async ({ contaId, acaoId, qtdeAcao }) => {
-  const qtdeAvailableUser = await checkUserHasAsset(contaId, acaoId);
-  checkQuantityAssetsAvailable(qtdeAcao, qtdeAvailableUser);
+  const qtdeAvailableUser = await validators.checkUserHasAsset(contaId, acaoId);
+  validators.checkQuantityAssetsAvailable(qtdeAcao, qtdeAvailableUser);
 
   const transaction = await sequelize.transaction();
   try {
-    await upadteSaleAssetsBroker(acaoId, qtdeAcao, transaction);
-    await updateSaleAssetsAccount(acaoId, qtdeAcao, qtdeAvailableUser, contaId, transaction);
-    await upadateHistoryOrders('venda', contaId, acaoId, qtdeAcao, transaction);
+    await updaters.upadteSaleAssetsBroker(acaoId, qtdeAcao, transaction);
+    await updaters.updateSaleAssetsAccount(acaoId, qtdeAcao, qtdeAvailableUser, contaId, transaction);
+    await updaters.upadateHistoryOrders('venda', contaId, acaoId, qtdeAcao, transaction);
     
     await transaction.commit();
     return { contaId, acaoId, qtdeAcao, status: 'executada' };
@@ -63,4 +50,5 @@ const serviceSaleAssets = async ({ contaId, acaoId, qtdeAcao }) => {
 module.exports = {
   serviceBuyAssets,
   serviceSaleAssets,
+  sequelize
 }

@@ -40,7 +40,7 @@ const checkAsset = async (company, tag) => {
       message: 'Asset already exists.',
       status: StatusCodes.UNPROCESSABLE_ENTITY
     });
-   }
+   };
 }
 
 const createAsset = async ({ company, tag, value, quantity }) => {

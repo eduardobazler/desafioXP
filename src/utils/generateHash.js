@@ -6,4 +6,6 @@ const generateHash = (dado) => {
   return dadoCrypt;
 };
 
-module.exports = generateHash;
+module.exports = {
+  generateHash
+};

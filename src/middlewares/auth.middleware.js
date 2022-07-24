@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { authenticateToken } = require('../utils/JWTtoken');
+const JWT = require('../utils/JWTtoken');
 const throwErroWithStatus = require('../utils/throwErrorWithStatus');
 
 const messageToken = 'Expired or invalid token';
@@ -11,7 +11,7 @@ const authMiddleware = (req, res, next) => {
     return throwErroWithStatus({ message: messageToken, status: StatusCodes.UNAUTHORIZED });
   }
 
-  const payload = authenticateToken(token);
+  const payload = JWT.authenticateToken(token);
 
   if (payload.error) {
     return throwErroWithStatus({ message: messageToken, status: StatusCodes.UNAUTHORIZED });

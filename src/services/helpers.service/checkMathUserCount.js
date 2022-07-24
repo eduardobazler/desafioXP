@@ -1,5 +1,6 @@
+const { StatusCodes } = require('http-status-codes');
 const { Conta } = require('../../models');
-
+const throwErrorWithStatus = require('../../utils/throwErrorWithStatus');
 const checkMathUserCount = async ({contaId, userId}) => {
   const isMath = await Conta.findOne({
     where: { id: contaId, userId}
@@ -13,4 +14,4 @@ const checkMathUserCount = async ({contaId, userId}) => {
   };
 }
 
-module.exports = checkMathUserCount;
+module.exports = {checkMathUserCount};

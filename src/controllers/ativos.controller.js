@@ -3,7 +3,7 @@ const ativosService = require('../services/ativos.service');
 
 const getAllAssets = async (_req, res) => {
   const assets = await ativosService.getAllAssets();
-  return res.status(StatusCodes.OK).json(assets);
+  res.status(StatusCodes.OK).json(assets);
 }
 
 const getByAsset = async (req, res) => {
