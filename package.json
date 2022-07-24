@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./src/tests/units/**/*$NAME*.test.js --exit",
-    "test-coverage": "nyc --all --include src/services --include src/controllers --include src/middlewares mocha ./src/tests/units/**/*.test.js",
+    "test": "mocha ./src/tests/unit/**/*$NAME*.test.js --exit",
+    "test-coverage": "nyc --all --include src/services --include src/controllers --include src/middlewares mocha ./src/tests/unit/**/*.test.js",
     "dev": "nodemon src/server.js",
     "start": "node src/server.js"
   },
